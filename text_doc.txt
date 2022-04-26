@@ -132,8 +132,8 @@ block content - место куда будут определены child шаб
 
 6. Развертывание сайта на pythonanywhere:
 
-Pythonanywhere как и Heroku позволяет бесплатно развертывать flask-приложения. Но pythonanywhere более удобный для пользователей.
-Поэтому я выбрал pythonanywhere.
+Pythonanywhere как и Heroku позволяет бесплатно развертывать flask-приложения. Но pythonanywhere,
+на мой взгляд, удобней для пользователей. Поэтому я выбрал pythonanywhere.
 Важно: 
 if __name__ == "__main__":
     app.run(debug=True)
