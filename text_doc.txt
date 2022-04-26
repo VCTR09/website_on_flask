@@ -1,0 +1,143 @@
+Web Development with Flask - Build a Personal Website
+
+Создание веб-сайта при помощи html, css (frontend ) и python (backend).
+
+Процесс:
+
+1. Создание виртуальной среды:
+
+Виртуальная среда создается в начале, чтобы иметь доступ к версии Python без библиотек, 
+модулей и всего того, что не понадобится в работе над данным проектом.
+pip install virtualenv
+
+python3 -m venv virtual
+
+Установка Flask в виртуальной среде:
+virtual/bin/pip3 install flask  (для mac)
+
+Запуск веб-сайта в виртуальной среде:
+virtual/bin/python3 Website_on_Flask/script1.py
+
+
+
+Начало работы:
+Импортируем класс Flask фреймфорка Flask в файле script1.py:
+from flask import Flask
+Создаем переменную app для хранения экземляра объекта:
+app = Flask(__name__)
+### name - специальная переменная, в качестве значения принимающая название Python скрипта/файла.
+
+Используем декоратор @app.route('/') для создания Домашней страницы.
+URL по которому наш вебсайт будет виден (/ - Домашняя страница)
+
+Создадим функцию, определяющую функционал веб-страницы:
+ def home():
+    return render_template("home.html")
+
+Используем новый декоратор и новую функцию, для создания страницы 'about':
+@app.route('/about/')
+def about():
+    return render_template("about.html")
+
+
+Далее:
+if __name__ == "__main__":
+    app.run(debug=True)
+
+### При запуске Python файла, Python присваивает файлу имя '__main__'. При импорте данного скрипта в другой файл, данному 
+файлу будет присвоено имя 'script1.py' и файл запускаться не будет. С помощью кода выше, мы можем иметь контроль над файлом, 
+так как приложение запускается только из данного файла. 
+
+
+2. Подготовка HTML-шаблона:
+
+Для того чтобы функция возвращала не просто строку, а html-шаблон (return render_template("home.html")),
+нужно импортировать метод render_template библиотеки Flask.
+from flask import Flask, render_template
+
+### render_template обращается к html-файлу, хранящемуся в папке приложения, и показывает данный html-файл
+по заданному URL.
+### Все html-файлы должны хранится в папке, названной 'templates'.
+
+Содадим файл home.html в папке templates. Важно чтобы имя файла совпадало с именем файла, который
+мы возвращаем в методе render_template в функции.
+
+Простой html-файл выглядит следующим образом:
+<!DOCTYPE html>
+<html>
+<body>
+    <h1>Домашняя страница</h1>
+    <p>Какой-то текст</p>
+</body>
+</html>
+
+
+3. Создание навигационного меню сайта:
+
+На примере файла layout.html
+layout.html - базовый шаблон, соответственно, home.html и about.html - child шаблоны. 
+стр.20 - 23
+<div class="container">
+    {%block content%}
+    {%endblock%}
+</div>
+
+block content - место куда будут определены child шаблоны home.html и about.html.
+
+На примере файла home.html (см. выше):
+Так как home.html это child шаблон, <!DOCTYPE html> не нужен, равно как и <body> тег.
+Заменим <body> тег на <div class="home">.
+Добавим в начале:
+{%extends "layout.html"%}
+{%block content%}
+
+Таким образом, данный код из файла home.html 
+<div class="home">
+    <h1>Домашняя страница</h1>
+    <p>Какой-то текст</p>
+</div>
+
+будет направлен в {%block content%} файла layout.html и файл layout.html будет показан по URL домашней страницы.
+
+
+4. Улучшение внешнего вида страниц при помощи CSS
+
+Создадим файл main.css, который должен находиться в папке static.
+Далее свяжем main.css c layout.html файлом.
+
+Чтобы получить доступ к файлу main.css, в файле layout.html надо добавить в начале данный код:
+<head>
+      <title>Flask App</title>
+      <link rel="stylesheet" href="{{url_for('static',filename='css/main.css')}}">
+  </head>
+
+
+
+5. Прикрепление изображений:
+
+Поместим изображение в static/images.
+В HTML-файле, который находится в папке templates вставим строку: 
+<img src="{‌{url_for('static', filename='images/a.jpg')}}"
+
+Файл home.html теперь выглядит так:
+{%extends "layout.html"%}
+{%block content%}
+<div class="home">
+    <h1>My homepage</h1>
+    <p>Enjoying ourselves!</p>
+    <img src="{{url_for('static', filename='images/IMG_1349.jpeg')}}" align="middle" width="390" height="280" />
+</div>
+{%endblock%}
+
+
+6. Развертывание сайта на pythonanywhere:
+
+Pythonanywhere как и Heroku позволяет бесплатно развертывать flask-приложения. Но pythonanywhere более удобный для пользователей.
+Поэтому я выбрал pythonanywhere.
+Важно: 
+if __name__ == "__main__":
+    app.run(debug=True)
+
+При развертывании сайта, в файле script1.py, True нужно заменить на False, 
+чтобы не показывать посетителям ошибки Python, так как это может привести к уязвимости сайта.
+
